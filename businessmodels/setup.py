@@ -8,25 +8,24 @@ setuptools.setup(
 	name="businessmodels",
 
 	# version of the module
-	version="0.0.3",
+	version="0.0.5",
 
 	# Name of Author
-	author="Bhargab Ganguli",
+	author="Business Brio",
 
 	# your Email address
-	author_email="bhargab.ganguli@gmail.com",
+	author_email="gautam@businessbrio.com",
 
 	# #Small Description about module
-	# description="adding number",
+	description="It is a Data Science package containing many modules to help in analysis.",
 
-	# long_description=long_description,
 
 	# Specifying that we are using markdown file for description
 	long_description=long_description1,
 	long_description_content_type="text/markdown",
 
 	# Any link to reach this module, ***if*** you have any webpage or github profile
-	# url="https://github.com/username/",
+	url="https://github.com/Business-Brio/businessmodels/tree/main/businessmodels",
 	packages=setuptools.find_packages(),
 
 
@@ -35,7 +34,7 @@ setuptools.setup(
 
 
 
-		 install_requires=["business-models-initial"],
+	install_requires=["business-models-initial"],
 
 
 	license="MIT",
