@@ -26,7 +26,8 @@ businessmodels is a helpful package in data science. It contains several modules
 ## MAIN FEATURES
 - performance rank model (model name: performance_rank)
     - Get affiliates' ranked table on basis of their performance and their interpreted result. This module's documentation is here: 
-
+- customer segmentation model (model name: customersegmentation)
+- get sla moel (model name: get_sla)
 ## CONTRIBUTING
 
 
