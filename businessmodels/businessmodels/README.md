@@ -11,6 +11,9 @@ businessmodel MODULES:
 ## modules
 Modules under the package businessmodel are:
 - [performance_rank](#performance_rank)
+- [customersegmentation](#customer_segmentation)
+- [get_sla](#get_sla)
+- [price_elasticity](#price_elasticity)
 
 ## call_module
 
