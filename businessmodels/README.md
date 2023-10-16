@@ -10,7 +10,7 @@ businessmodels
 
 ## Introduction
 
-This python package will classify associates on basis of there performance. 
+This python package has several modules to work for data analysis. 
 
 ## Installation
 
