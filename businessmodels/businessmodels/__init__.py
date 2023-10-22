@@ -1,1 +1,2 @@
-__all__=["performance_rank","customersegmentation","get_sla"]
+__all__=["performance_rank","customersegmentation","get_sla",
+         "price_elasticity","sla_determine","recommendation_engine"]
