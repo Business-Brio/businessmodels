@@ -14,8 +14,8 @@ Modules under the package businessmodel are:
 - [customersegmentation](#customer_segmentation)
 - [get_sla](#get_sla)
 - [price_elasticity](#price_elasticity)
-- [sla_determine](#sla determine)
-- [recommendation_engine](#recommendation engine)
+- [sla_determine](#sla_determine)
+- [recommendation_engine](#recommendation_engine)
 ## call_module
 
 ```bash
