@@ -1,9 +1,3 @@
-# -- coding: utf-8 --
-"""
-Created on Fri oct  19 16:15:41 2023
-
-@author: Shuvadeep
-"""
 from datetime import datetime as dt    
 import numpy as np
 import pandas as pd
@@ -13,7 +7,7 @@ from scipy.sparse import csr_matrix
 from collections import defaultdict
 import re
 
-class recommendation:
+class recommandation:
     def __init__(self, df):
         self.df = df
         self.df1=self.recomendation_by_customer()
@@ -171,21 +165,25 @@ class recommendation:
         return df_common
     
     def mba(self):
-        threshold=0.02
-        df_original=self.df
-        basket=df_original.groupby(['VISIT_ID','CAT_ID']).size().unstack().fillna(0)
-        basket[basket!=0]=1
+        threshold = 0.01  # Adjust the minimum support threshold as needed
+        df_original = self.df
+        basket = df_original.groupby(['VISIT_ID', 'CAT_ID']).size().unstack().fillna(0)
+        basket[basket != 0] = 1
         basket.max(axis=1).sum()
-        # minimum transaction value is 0.5% of total transactions - Needs to be checked
-        minTransaction = len(basket.index)*threshold
+        minTransaction = len(basket.index) * threshold
         totalTransactions = len(basket.index)
-        min_support_calc = minTransaction/totalTransactions
-        print('number of baskets for analysis is', totalTransactions)
+        min_support_calc = minTransaction / totalTransactions
+
+        # Perform frequent itemset mining
         frequent_itemsets = fpgrowth(basket, min_support=min_support_calc, use_colnames=True)
         frequent_itemsets.describe()
-        rules = association_rules(frequent_itemsets, metric="lift", min_threshold=1)
-        rules.sort_values('confidence', ascending = False, inplace = True)
+
+        # Adjust the minimum threshold for association rules to capture more rules
+        rules = association_rules(frequent_itemsets, metric="lift", min_threshold=0.2)  # Adjust the threshold as needed
+        rules.sort_values('confidence', ascending=False, inplace=True)
+        
         return rules
+
     def convert_to_frozensets(self):
         dataframe=self.df4
         # Iterate over each column in the DataFrame
@@ -206,15 +204,15 @@ class recommendation:
         basket_P['recomendations'] = None
         for index, row in basket_P.iterrows():
             cust_id = index
-            recomendations = df_common[df_common['Customer'] == cust_id].iloc[:, 0:].values.tolist()
+            recomendations = df_common[df_common ['Customer'] == cust_id].iloc[:, 0:].values.tolist()
             recomendations = [item for sublist in recomendations for item in sublist]
             # remove the nan values
             recomendations = [x for x in recomendations if str(x) != 'nan']
             # make it int 
-            recomendations = [int(x) for x in recomendations]
+            recomendations = [int(x) if pd.notna(x) else 0 for x in recomendations]
             recomendations = frozenset(recomendations)
             basket_P.at[cust_id, 'recomendations'] = recomendations
-        df_mba=self.df5    
+        df_mba=self.df4
         recommendations = defaultdict(set)
         for _, row in basket_P.iterrows():
             purchases = row['purchases']
@@ -238,3 +236,4 @@ class recommendation:
                 common = None
             basket_P.at[index, 'common'] = common
         return basket_P
+    
