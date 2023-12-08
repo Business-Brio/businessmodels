@@ -32,7 +32,6 @@ businessmodels is a helpful package in data science. It contains several modules
 - get sla moel (model name: get_sla)
 ## CONTRIBUTING
 Shuvadeep Maity - https://www.linkedin.com/in/shuvadeep-maity/
-Manas Roy
 
 ## LICENSE
 It is licensed under OSI approved MIT open license.
