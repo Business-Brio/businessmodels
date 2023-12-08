@@ -31,7 +31,7 @@ businessmodels is a helpful package in data science. It contains several modules
 - recommendate a product to a customer (model name: recommendation_engine)
 - get sla moel (model name: get_sla)
 ## CONTRIBUTING
-Shuvadeep Maity - https://www.linkedin.com/in/shuvadeep-maity/
+[Shuvadeep Maity](https://www.linkedin.com/in/shuvadeep-maity/)
 
 ## LICENSE
 It is licensed under OSI approved MIT open license.
