@@ -1,3 +1,9 @@
+# -- coding: utf-8 --
+"""
+Created on Fri oct  10 16:15:41 2023
+
+@author: Shuvadeep
+"""
 from datetime import datetime as dt    
 import numpy as np
 import pandas as pd
@@ -60,7 +66,7 @@ class cust_seg:
         # create a new column and use np.select to assign values to it using our lists as arguments
         self.df_daily_active['Customer_segments'] = np.select(conditions, values)
         df_daily_active_fn=self.df_daily_active.groupby('Customer_segments').median().rename(columns= {'Recency':"Median Recency","Frequency":"Median Frequency","Monetary":'Median Monetary'}).join(self.df_daily_active.Customer_segments.value_counts().rename('count'))
-        return self.df_daily_active.round(2),df_daily_inactive.round(2),df_daily_active_fn.round(2)
+        return rfm_daily.round(2),self.df_daily_active.round(2),df_daily_inactive.round(2),df_daily_active_fn.round(2)
     
     def Weekly (self):
         df=self.df
@@ -138,7 +144,7 @@ class cust_seg:
         # create a new column and use np.select to assign values to it using our lists as arguments
         df_weekly_active['Customer_segments'] = np.select(conditions, values)
         df_weekly_active_fn=df_weekly_active.groupby('Customer_segments').median().rename(columns= {'Recency':"Median Recency","Frequency":"Median Frequency","Monetary":'Median Monetary'}).join(df_weekly_active.Customer_segments.value_counts().rename('count'))
-        return df_weekly_active.round(2),df_weekly_inactive.round(2),df_weekly_active_fn.round(2)
+        return rfm_weekly_active.round(2),df_weekly_active.round(2),df_weekly_inactive.round(2),df_weekly_active_fn.round(2)
     
     def Monthly (self):
         df=self.df
@@ -238,7 +244,7 @@ class cust_seg:
         # create a new column and use np.select to assign values to it using our lists as arguments
         df_monthly_active['Customer_segments'] = np.select(conditions, values)
         df_monthly_active_fn=df_monthly_active.groupby('Customer_segments').median().rename(columns={"Recency":"Median Recency","Frequency":"Median Frequency","Monetary":"Median Monetary"}).join(df_monthly_active.Customer_segments.value_counts().rename('count'))
-        return df_monthly_active.round(2),df_monthly_inactive.round(2),df_monthly_active_fn.round(2)
+        return rfm_monthly_active.round(2),df_monthly_active.round(2),df_monthly_inactive.round(2),df_monthly_active_fn.round(2)
     
     def Quarterly (self):
         df=self.df
@@ -356,4 +362,4 @@ class cust_seg:
         # create a new column and use np.select to assign values to it using our lists as arguments
         df_quarterly_active['Customer_segments'] = np.select(conditions, values)
         df_quarterly_active_fn=df_quarterly_active.groupby('Customer_segments').median().rename(columns={"Recency":"Median Recency","Frequency":"Median Frequency","Monetary":"Median Monetary"}).join(df_quarterly_active.Customer_segments.value_counts().rename('count'))
-        return df_quarterly_active.round(2),df_quarterly_inactive.round(2),df_quarterly_active_fn.round(2)
+        return rfm_quarterly_active.round(2),df_quarterly_active.round(2),df_quarterly_inactive.round(2),df_quarterly_active_fn.round(2)
