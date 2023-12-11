@@ -22,6 +22,38 @@ pip install businessmodels
 
 ## DOCUMENTATION
 businessmodels is a helpful package in data science. It contains several modules to get desired analysis output. Most of the modules are dedicated to business analysis purposes.
+You can find the documentation [here](https://github.com/Business-Brio/businessmodels/tree/main/businessmodels/Documentation)
+
+- ## Customer Segmentation
+Data Overview: 
+![image](https://github.com/Business-Brio/businessmodels/assets/134270407/35c5e11e-2c94-4fcd-a3f9-f2fbf677e712)
+
+Function Call - 
+Perform customer segmentation using the 'businessmodels' library and 'customersegmentation.cust_seg' is a function in the library, so it takes the 'df' DataFrame and a date (Ex.- '2023-04-02') as arguments.
+![image](https://github.com/Business-Brio/businessmodels/assets/134270407/70701ef1-e1d3-401d-87d4-551453af0484)
+By changing the Segments.daily to Weekly, Monthly, Quarterly get others segments customers.
+
+- ## Price Elasticity of Products 
+Data Overview: 
+![image](https://github.com/Business-Brio/businessmodels/assets/134270407/20fdc5df-17f2-459e-96f8-eace327398a9)
+
+Function Call - 
+Calculate price elasticity using the 'pricing' function from the 'price_elasticity' module. Get the results of price elasticity, separating products into different categories
+- 'Elastic_Products' are products with elastic demand
+- 'Unit_Elastic_Products' are products with unitary elastic demand
+- 'Inelastic_Products' are products with inelastic demand
+![image](https://github.com/Business-Brio/businessmodels/assets/134270407/b7d78384-ded1-4488-a587-1125b9687192)
+
+- ## Recommendation Engine
+Data Overview: 
+![image](https://github.com/Business-Brio/businessmodels/assets/134270407/8e34a3e4-a3d5-4e8a-8f87-c94a52e411b0)
+
+Function Call - 
+Call the 'recommendation' method from the recommendation_engine module and pass the 'df' DataFrame as an argument than Call the 'final_recomendations' method on the 'run' object to generate the list of recommended products.
+Print or use the 'product_list' variable, which contains the recommended products.
+![image](https://github.com/Business-Brio/businessmodels/assets/134270407/cb1176df-d1f6-49f2-9e99-c41ef342af7b)
+
+
 
 ## MAIN FEATURES
 - performance rank model (model name: performance_rank)
@@ -31,7 +63,9 @@ businessmodels is a helpful package in data science. It contains several modules
 - recommendate a product to a customer (model name: recommendation_engine)
 - get sla moel (model name: get_sla)
 ## CONTRIBUTING
+This Code of Conduct applies both within project spaces and in public spaces when an individual is representing the project or its community.Instances of abusive, harassing, or otherwise unacceptable behavior may be reported by contacting the working group by e-mail or text messages sent to.
 [Shuvadeep Maity](https://www.linkedin.com/in/shuvadeep-maity/)
+[Manas Roy](https://www.linkedin.com/in/manas-roy-ba809515b/)
 
 ## LICENSE
 It is licensed under OSI approved MIT open license.
