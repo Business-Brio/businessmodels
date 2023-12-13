@@ -48,6 +48,13 @@ Data Overview:
 
 Function Call - 
 Perform customer segmentation using the 'businessmodels' library and 'customersegmentation.cust_seg' is a function in the library, so it takes the 'df' DataFrame and a date (Ex.- '2023-04-02') as arguments.
+
+```bash
+from businessmodels import customersegmentation
+Segments = customersegmentation.cust_seg(df, '2023-04-02')
+Customer_rfm,active_customer_segments,inactive_customers,segments_summary = Segments.Daily()
+```
+
 ![image](https://github.com/Business-Brio/businessmodels/assets/134270407/70701ef1-e1d3-401d-87d4-551453af0484)
 By changing the Segments.daily to Weekly, Monthly, Quarterly get others segments customers.
 
@@ -60,6 +67,13 @@ Calculate price elasticity using the 'pricing' function from the 'price_elastici
 - 'Elastic_Products' are products with elastic demand
 - 'Unit_Elastic_Products' are products with unitary elastic demand
 - 'Inelastic_Products' are products with inelastic demand
+
+```bash
+from businessmodels import price_elasticity
+Separated = price_elasticity.pricing(df)
+Elastic_Products,Unit_Elastic_Products,Inelastic_Products = Separated.price_elasticity()
+```
+
 ![image](https://github.com/Business-Brio/businessmodels/assets/134270407/b7d78384-ded1-4488-a587-1125b9687192)
 
 - ## Recommendation Engine
@@ -69,7 +83,33 @@ Data Overview:
 Function Call - 
 Call the 'recommendation' method from the recommendation_engine module and pass the 'df' DataFrame as an argument than Call the 'final_recomendations' method on the 'run' object to generate the list of recommended products.
 Print or use the 'product_list' variable, which contains the recommended products.
-![image](https://github.com/Business-Brio/businessmodels/assets/134270407/cb1176df-d1f6-49f2-9e99-c41ef342af7b)    
+
+```bash
+from businessmodels import recommendation_engine
+run = recommendation_engine.recommendation(df)
+product_list = run.final_recomendations()
+```
+
+![image](https://github.com/Business-Brio/businessmodels/assets/134270407/cb1176df-d1f6-49f2-9e99-c41ef342af7b)
+
+- ## GET SLA Module
+Function Call - 
+```bash
+from businessmodels import get_sla
+sla_determination = get_sla.SLADetermination(df)
+sla_determination.filter_and_convert_dates(st,et)
+sla_determination.calculate_lead_to_sale_diff()
+x,y = sla_determination.categorize_lead_to_sale_calculate()
+```
+- ## GET SLA DETERMINATION Module
+Function Call -
+
+```bash
+from businessmodels import sla_determine
+column = "Required Column Name"
+sla_check = sla_determine.SLA_Determination(df, column)
+a,b,c,d = sla_check.calculate_sla(st, et)
+```
 
 
 ## CONTRIBUTING
