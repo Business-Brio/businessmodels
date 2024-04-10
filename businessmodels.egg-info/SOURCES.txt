@@ -1,4 +1,4 @@
-LICENSE.txt
+LICENSE
 README.md
 setup.py
 businessmodels/__init__.py
