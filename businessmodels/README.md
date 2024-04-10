@@ -93,8 +93,14 @@ sla_check = sla_determine.SLA_Determination(df, column)
 a,b,c,d = sla_check.calculate_sla(st, et)
 ```
 
-- ## performance_rank
-- Data where columns are as follow: column1: Individual associate id(s) or name. column2: Saleflag or success of individual where 0 is unfulfiled (unsold) and 1 is fulfiled (sold). column3: Market type containing two labels for each affiliate. For example- urban_market and rural_market It contains following methods:
+- ## Performance Rank
+Function Call -
+
+```bash
+from businessmodels import performance_rank
+```
+
+Data where columns are as follow: column1: Individual associate id(s) or name. column2: Saleflag or success of individual where 0 is unfulfiled (unsold) and 1 is fulfiled (sold). column3: Market type containing two labels for each affiliate. For example- urban_market and rural_market It contains following methods:
 
 * feed_data(data, percentage, column1, column2, column3): Feed the dataframe, set percentage to get interpretetion, name of first column (e.g. "salesman_id"), name of second column (e.g. "saleflag"), name of third column (e.g. "market_type") N.B: percentage will help to classify top n% and bottom n% associates for each market type according to their performance. Create an instance with the feed_data method.
 * interpret(): Call this method on the created feed_data instance. This will return a dictionary containing interpreted performance result of each associate.
