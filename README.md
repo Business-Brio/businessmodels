@@ -133,14 +133,14 @@ Extraction of Serviceable Addressable Market(SAM) for a business unit/entity (DM
 - get sla model (model name: get_sla)
 
 ## CONTRIBUTORS
-[Shuvadeep Maity](https://www.linkedin.com/in/shuvadeep-maity/)
-[Manas Roy](https://www.linkedin.com/in/manas-roy-ba809515b/)
-[Arnab Basak](https://in.linkedin.com/in/arnab-basak-09954a94?original_referer=https%3A%2F%2Fwww.google.com%2F)
-[Ayan Chakraborty](https://www.linkedin.com/in/ayan-chakraborty?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app)
-[Riddhiman Syed](https://www.linkedin.com/in/riddhiman-syed-045947220?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app)
-[Tanuka Chattaraj](https://www.linkedin.com/in/tanuka-chattaraj-b80a0a198?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app)
-[Bhargab Ganguli](https://www.linkedin.com/in/bhargab-ganguli-570750195?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app)
-[Anasua Ghosh]()
+[Shuvadeep Maity](https://www.linkedin.com/in/shuvadeep-maity/),
+[Manas Roy](https://www.linkedin.com/in/manas-roy-ba809515b/),
+[Arnab Basak](https://in.linkedin.com/in/arnab-basak-09954a94?original_referer=https%3A%2F%2Fwww.google.com%2F),
+[Ayan Chakraborty](https://www.linkedin.com/in/ayan-chakraborty?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app),
+[Riddhiman Syed](https://www.linkedin.com/in/riddhiman-syed-045947220?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app),
+[Tanuka Chattaraj](https://www.linkedin.com/in/tanuka-chattaraj-b80a0a198?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app),
+[Bhargab Ganguli](https://www.linkedin.com/in/bhargab-ganguli-570750195?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app),
+[Anasua Ghosh]() .
 
 - For furthers enquiries, pelase reach out to [info@businessbrio.com](info@businessbrio.com)
 
