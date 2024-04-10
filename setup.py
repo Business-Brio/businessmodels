@@ -8,7 +8,7 @@ setuptools.setup(
 	name="businessmodels",
 
 	# version of the module
-	version="0.1.6",
+	version="0.1.7",
 
 	# Name of Author
 	author="Business Brio",
