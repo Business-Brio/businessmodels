@@ -75,6 +75,9 @@ product_list = run.final_recomendations()
 ![image](https://github.com/Business-Brio/businessmodels/assets/134270407/cb1176df-d1f6-49f2-9e99-c41ef342af7b)
 
 - ## GET SLA Module
+Data Overview: The data used to demonstrate this module is basically a sales data having time taken to contact lead for the very first time units in minutes(Lead2FirstIntr_datedifference_Minute), Sale non-sale column(saleflag) with 0 referring to non-sale and 1 referring sale, date of order(order_date), lead generation date(lead_date), number of interactions done by sales team after the generation of lead(interactions) and difference of date between order date and lead generation date(Lead_to_Sale_diff).
+
+The module needs to be imported from the businessmodels package using the following line of code
 Function Call - 
 ```bash
 from businessmodels import get_sla
@@ -84,8 +87,10 @@ sla_determination.calculate_lead_to_sale_diff()
 x,y = sla_determination.categorize_lead_to_sale_calculate()
 ```
 - ## GET SLA DETERMINATION Module
-Function Call -
+Data Overview: The data used to demonstrate this module is basically a sales data having time taken to contact lead for the very first time units in minutes(Lead2FirstIntr_datedifference_Minute), Sale non-sale column(saleflag) with 0 referring to non-sale and 1 referring sale, date of order(order_date), lead generation date(lead_date).
 
+The module needs to be imported from the businessmodels package using the following line of code
+Function Call -
 ```bash
 from businessmodels import sla_determine
 column = "Required Column Name"
