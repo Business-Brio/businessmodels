@@ -116,7 +116,7 @@ Function Call -
 ```bash
 from businessmodels import SAMfromVTess
 ```
-Extraction of Serviceable Addressable Market(SAM) for a business unit/entity (DMU for DEA Models) by taking inputs for GIS cordinates for the specifics business unit's catchment area as received after running Voronoi Tessellation.
+Extraction of Serviceable Addressable Market(SAM) for a business unit/entity (DMU for DEA Models) by taking inputs for GIS coordinates for the specifics business unit's catchment area as received after running Voronoi Tessellation.
 
 ## MAIN FEATURES
 - performance rank model (model name: performance_rank)
