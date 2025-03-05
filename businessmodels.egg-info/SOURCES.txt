@@ -2,6 +2,7 @@ LICENSE
 README.md
 setup.py
 businessmodels/__init__.py
+businessmodels/ai_models.py
 businessmodels/customersegmentation.py
 businessmodels/get_sla.py
 businessmodels/performance_rank.py
