@@ -33,12 +33,14 @@ class QAmodels:
         Calculations: Q4 2024 consumption = SUM(consumption_amount) for each material in Q4 2024; Q4 2023 consumption = SUM(consumption_amount) for each material in Q4 2023; Percentage increase = ((Q4 2024 consumption - Q4 2023 consumption) / Q4 2023 consumption) * 100.
         Filters: Include only materials where percentage increase >= 30% AND Q4 2023 consumption > 0.
         Sorting: Order by percentage increase descending."
+        For example, if the user asks "Find the Same invoice number raised twice by the same vendor in the same financial year 2024," you should take only take EBELN, LIFNR, BUDAT_MKPF columns from MSEG table.
         Keep your response simple, clear, and in plain text format. Focus on making vague terms specific and defining precise calculations.
     
         Note: - For consumption calculations, only consider records where SHKZG = 'H'. (Important)
             - For procurement or supply calculations, only consider recods where SHKZG='S'.(Important)
-            - For inventory calculation,consider both 'S' = Addition (positive MENGE) and 'H' = Deduction (negative MENGE)
-        """
+            - For inventory calculation,consider both 'S' = Addition (positive MENGE) and 'H' = Deduction (negative MENGE). (Important)
+            - For invoice number, vendor number and financial year take EBELN, LIFNR, and BUDAT_MKPF columns from MSEG table. (Important)
+    """
         return enhancement_prompt
 
     def sql_prompt(self, enhanced_question):
@@ -91,9 +93,10 @@ class QAmodels:
         - When using CTEs, place them at the beginning of the query using WITH syntax.
         - For date functions, use Spark SQL-compatible functions (date_add, date_sub, etc.).
         - For conditional logic, ensure CASE statements are properly formatted for Spark SQL.
-        -For procurement or supply calculations, only consider recods where SHKZG='S'.(Important)
-        - For inventory calculation,consider both 'S' = Addition (positive MENGE) and 'H' = Deduction (negative MENGE)
-        Note: For consumption calculations, only consider records where SHKZG = 'H'. (Important)
+        Note: - For consumption calculations, only consider records where SHKZG = 'H'. (Important)
+            - For procurement or supply calculations, only consider recods where SHKZG='S'.(Important)
+            - For inventory calculation,consider both 'S' = Addition (positive MENGE) and 'H' = Deduction (negative MENGE). (Important)
+            - For invoice number, vendor number and financial year take EBELN, LIFNR, and BUDAT_MKPF columns from MSEG table. (Important)
         Provide only the SQL query as plain text without any formatting or additional text.
         """
 
