@@ -4,43 +4,120 @@ class QAmodels:
     def __init__(self, schema):
         self.schema = schema  # Store schema as an instance attribute
 
-    def enhancement_prompt(self, user_question, prompt_instructions="", current_date=None):
+    def enhancement_prompt(self, user_question, prompt_instructions=""):
         """
-        Generates an enhancement prompt to refine the user's question.
+        Enhances the user's query by adding relevant schema details, instructions, and the current date.
+    
+        IMPORTANT:
+        - "Last quarter" without a year refers to the current quarter
+        - "Last quarter of YYYY" refers to Q4 of FY YYYY-(YYYY+1), which is Jan-Mar of (YYYY+1)
         """
-        if current_date is None:
-            current_date = datetime.now().strftime('%Y-%m-%d')  # Default to today's date
+        # Use the current date
+        current_date = datetime.now().strftime('%Y-%m-%d')
+ 
+        # Extract year and month from current date
+        current_datetime = datetime.now()
+        current_year = current_datetime.year
+        current_month = current_datetime.month
+    
+        # Determine the current financial year
+        current_fy_start_year = current_year if current_month >= 4 else current_year - 1
+        current_fy_end_year = current_fy_start_year + 1
+    
+        # Determine the current quarter within the financial year
+        if 4 <= current_month <= 6:
+            current_quarter = 1
+        elif 7 <= current_month <= 9:
+            current_quarter = 2
+        elif 10 <= current_month <= 12:
+            current_quarter = 3
+        else:  # 1 <= current_month <= 3
+            current_quarter = 4
+    
+        # Define exact date ranges for current and previous year quarters
+        if current_quarter == 1:
+            current_quarter_start = f"{current_fy_start_year}-04-01"
+            current_quarter_end = f"{current_fy_start_year}-06-30"
+            prev_year_quarter_start = f"{current_fy_start_year-1}-04-01"
+            prev_year_quarter_end = f"{current_fy_start_year-1}-06-30"
+        elif current_quarter == 2:
+            current_quarter_start = f"{current_fy_start_year}-07-01"
+            current_quarter_end = f"{current_fy_start_year}-09-30"
+            prev_year_quarter_start = f"{current_fy_start_year-1}-07-01"
+            prev_year_quarter_end = f"{current_fy_start_year-1}-09-30"
+        elif current_quarter == 3:
+            current_quarter_start = f"{current_fy_start_year}-10-01"
+            current_quarter_end = f"{current_fy_start_year}-12-31"
+            prev_year_quarter_start = f"{current_fy_start_year-1}-10-01"
+            prev_year_quarter_end = f"{current_fy_start_year-1}-12-31"
+        else:  # current_quarter == 4
+            current_quarter_start = f"{current_fy_end_year}-01-01"
+            current_quarter_end = f"{current_fy_end_year}-03-31"
+            prev_year_quarter_start = f"{current_fy_end_year-1}-01-01"
+            prev_year_quarter_end = f"{current_fy_end_year-1}-03-31"
 
         enhancement_prompt = f"""
     You are a highly skilled SQL expert and data analyst. Your task is to enhance a given user question
     by making it more structured, detailed, and aligned with the provided schema and prompt instructions.
-    *Today's Date:* {current_date}
-    *Schema:* {self.schema}
-    *Prompt Instructions:* {prompt_instructions}
-    *User Question:* {user_question}
+   
+    Today's Date: {current_date}
+    Schema: {self.schema}
+    Prompt Instructions: {prompt_instructions}
+    User Question: {user_question}
+   
+    CRITICAL INFORMATION ABOUT DATE INTERPRETATIONS:
+   
+    The organization follows an April-March financial year structure:
+    - Financial Year X-Y runs from April 1 of year X to March 31 of year Y
+    - The current financial year is FY {current_fy_start_year}-{current_fy_end_year}
+    - The current quarter is Q{current_quarter} of FY {current_fy_start_year}-{current_fy_end_year}
+   
+    The quarters in each financial year are defined as:
+    - Q1: April 1 to June 30
+    - Q2: July 1 to September 30
+    - Q3: October 1 to December 31
+    - Q4: January 1 to March 31
+   
+    EXPLICIT DATE MAPPINGS FOR TODAY ({current_date}):
+    - "Last quarter" or "current quarter" refers to: {current_quarter_start} to {current_quarter_end}
+    - "Previous year's quarter" refers to: {prev_year_quarter_start} to {prev_year_quarter_end}
+    - "Last quarter 2024" specifically refers to: {current_quarter_start} to {current_quarter_end}
+    - "Last quarter 2023" specifically refers to: Q4 of FY 2023-2024, which is January 1, 2024 to March 31, 2024
+    
+    IMPORTANT TERMINOLOGY RULES:
+    1. "Last quarter" without specifying a year ALWAYS refers to the current quarter we are in right now.
+       EXAMPLE: Today is {current_date}, so "last quarter" means {current_quarter_start} to {current_quarter_end}.
+    
+    2. "Last quarter of YYYY" or "last quarter YYYY" ALWAYS refers to Q4 of FY YYYY-(YYYY+1), which is January-March of (YYYY+1).
+       EXAMPLE: "Last quarter of 2024" MUST be interpreted as January 1, 2025 to March 31, 2025.
+       EXAMPLE: "Last quarter of 2023" MUST be interpreted as January 1, 2024 to March 31, 2024.
+    
+    3. When comparing to "previous year", ALWAYS compare the same quarter of the previous financial year.
+       EXAMPLE: If we're looking at {current_quarter_start} to {current_quarter_end}, 
+       then "previous year" means {prev_year_quarter_start} to {prev_year_quarter_end}.
+    
+    4. SAP data in this organization is organized by financial year where April is period 1, May is period 2, etc.
+   
+    For the specific query "{user_question}", you MUST interpret:
+    - "Last quarter 2024" as {current_quarter_start} to {current_quarter_end} (Q4 of FY 2024-2025)
+    - "Previous year" as {prev_year_quarter_start} to {prev_year_quarter_end} (Q4 of FY 2023-2024)
+   
     Transform the user's question into a clear analysis plan using plain text only. Do not use markdown, bullets, or numbering. Format your response as follows:
  
-    "Analysis Plan: [Restate the core question in specific terms]
+    "Analysis Plan: [Restate the core question in specific terms, clearly specifying the exact date ranges]
     Data needed: [List the specific tables and fields required]
-    Time periods: [Define exact date ranges with specific months and years]
+    Time periods: [Define exact date ranges with specific months and years - be very explicit]
     Calculations: [Specify exact formulas for all metrics mentioned]
     Filters: [Define precise filtering conditions]
     Sorting: [Specify the order of results]"
-    For example, if the user asks "Find materials where consumption rate increased by 30% in the last quarter compared to previous year," your enhancement should be:
-    "Analysis Plan: Identify materials whose consumption rate in Q4 2024 (Oct-Dec 2024) increased by at least 30% compared to Q4 2023 (Oct-Dec 2023).
-    Data needed: Materials table with material_id, material_name; Consumption table with material_id, consumption_amount, consumption_date.
-    Time periods: Q4 2024 = October 1, 2024 to December 31, 2024; Q4 2023 = October 1, 2023 to December 31, 2023.
-    Calculations: Q4 2024 consumption = SUM(consumption_amount) for each material in Q4 2024; Q4 2023 consumption = SUM(consumption_amount) for each material in Q4 2023; Percentage increase = ((Q4 2024 consumption - Q4 2023 consumption) / Q4 2023 consumption) * 100.
-    Filters: Include only materials where percentage increase >= 30% AND Q4 2023 consumption > 0.
-    Sorting: Order by percentage increase descending."
-    For example, if the user asks "Find the Same invoice number raised twice by the same vendor in the same financial year 2024," you should take only take EBELN, LIFNR, BUDAT_MKPF columns from mseg table. 
+   
     Keep your response simple, clear, and in plain text format. Focus on making vague terms specific and defining precise calculations.
  
     Note: - For consumption calculations, only consider records where SHKZG = 'H'. (Important)
           - For procurement or supply calculations, only consider recods where SHKZG='S'.(Important)
-          - For inventory calculation,consider b oth 'S' = Addition (positive MENGE) and 'H' = Deduction (negative MENGE). (Important)
-          - For invoice number, vendor number and financial year take EBELN, LIFNR, and BUDAT_MKPF columns from mseg table. (Important)
-          - Convert the datatype of BUDAT_MKPF from 'YYYYMMDD' to 'YYYY-MM-DD'. (Important).
+          - For inventory calculation, consider both 'S' = Addition (positive MENGE) and 'H' = Deduction (negative MENGE). (Important)
+          - For invoice number, vendor number and financial year take EBELN, LIFNR, and BUDAT_MKPF_ columns from mseg table. (Important)
+          - Convert the datatype of BUDAT_MKPF_ from 'YYYYMMDD' to 'YYYY-MM-DD'. (Important)
     """
         return enhancement_prompt
 
@@ -62,6 +139,11 @@ Table Reference Rules:
   - MENGE (Quantity, STRING)
   - LIFNR (Vendor Number, STRING)
   - EBELN (Invoice No./Purchase Order No., STRING)
+  - MAA_URZEI (Origin Indicator, STRING)
+  - BWART (Movement Type, STRING)
+  - WERKS (Plant, STRING)
+  - LGORT (Storage Location, STRING)
+  - CHARG (Batch Number, STRING)
 - Columns from mbewh:
   - MATNR (Material Number, STRING)
   - LFMON (Financial Month, STRING)
@@ -107,15 +189,16 @@ Additional Guidelines:
 - For date functions, use Spark SQL-compatible functions (date_add, date_sub, etc.).
 - For conditional logic, ensure CASE statements are properly formatted for Spark SQL.
 - Ensure all string comparisons are case-sensitive unless specified otherwise
-- First, inspect the actual column names available in the mseg table schema. Based on the error message, BUDAT_MKPF is not available but there might be columns like BUDAT_MKPF_, CPUDT_MKPF, or BUSTM.
-
+- First, inspect the actual column names available in the mseg table schema. Based on the error message, BUDAT_MKPF_ is not available but there might be columns like BUDAT_MKPF_, CPUDT_MKPF, or BUSTM.
 Note: 
 - For consumption calculations, only consider records where SHKZG = 'H'. (Important)
 - For procurement or supply calculations, only consider records where SHKZG = 'S'. (Important)
-- For inventory calculation, consider both 'S' = Addition (positive MENGE) and  'H' = Deduction (negative MENGE). (Important)
-- For invoice number, vendor number and financial year take EBELN, LIFNR, and BUDAT_MKPF columns from mseg table. (Important)
+- For inventory calculation, consider both 'S' = Addition (positive MENGE) and 'H' = Deduction (negative MENGE). (Important)
+- For invoice number, vendor number and financial year take EBELN, LIFNR, and BUDAT_MKPF_ columns from mseg table. (Important)
 - String columns like MATNR, LIFNR, EBELN, CHARG, etc. should be properly quoted in the query for comparison.
-
+- Financial year (FY), fiscal year, or simply 'year' starts from April 1st of a given year to March 31st of the following year. (Important)
+- Q1 2024 (first Quarter) = April 1, 2024 to June 1, 2024; Q2 2024 (second Quarter) = July 1, 2024 to September 1, 2024. (Important)
+- Q3 2024 (third Quarter) = October 1, 2024 to December 1, 2024; Q4 2024 (last quarter or fourth Quarter) = January 1, 2025 to March 1, 2025. (Important)
 Provide only the SQL query as plain text without any formatting or additional text.
  
 """
