@@ -116,8 +116,8 @@ class QAmodels:
     Note: - For consumption calculations, only consider records where SHKZG = 'H'. (Important)
           - For procurement or supply calculations, only consider recods where SHKZG='S'.(Important)
           - For inventory calculation, consider both 'S' = Addition (positive MENGE) and 'H' = Deduction (negative MENGE). (Important)
-          - For invoice number, vendor number and financial year take EBELN, LIFNR, and BUDAT_MKPF_ columns from mseg table. (Important)
-          - Convert the datatype of BUDAT_MKPF_ from 'YYYYMMDD' to 'YYYY-MM-DD'. (Important)
+          - For invoice number, vendor number and financial year take XBLNR_MKPF, LIFNR, and BUDAT_MKPF columns from mseg table. (Important)
+          - Convert the datatype of BUDAT_MKPF from 'YYYYMMDD' to 'YYYY-MM-DD'. (Important)
     """
         return enhancement_prompt
 
@@ -138,12 +138,13 @@ Table Reference Rules:
   - SHKZG (Debit/Credit Indicator, STRING)
   - MENGE (Quantity, STRING)
   - LIFNR (Vendor Number, STRING)
-  - EBELN (Invoice No./Purchase Order No., STRING)
+  - EBELN (Purchase Order No., STRING)
   - MAA_URZEI (Origin Indicator, STRING)
   - BWART (Movement Type, STRING)
   - WERKS (Plant, STRING)
   - LGORT (Storage Location, STRING)
   - CHARG (Batch Number, STRING)
+  - XBLNR_MKPF (Invoice Number, STRING)
 - Columns from mbewh:
   - MATNR (Material Number, STRING)
   - LFMON (Financial Month, STRING)
@@ -189,13 +190,13 @@ Additional Guidelines:
 - For date functions, use Spark SQL-compatible functions (date_add, date_sub, etc.).
 - For conditional logic, ensure CASE statements are properly formatted for Spark SQL.
 - Ensure all string comparisons are case-sensitive unless specified otherwise
-- First, inspect the actual column names available in the mseg table schema. Based on the error message, BUDAT_MKPF_ is not available but there might be columns like BUDAT_MKPF_, CPUDT_MKPF, or BUSTM.
+- First, inspect the actual column names available in the mseg table schema. Based on the error message, BUDAT_MKPF is not available but there might be columns like BUDAT_MKPF_, CPUDT_MKPF, or BUSTM.
 Note: 
 - For consumption calculations, only consider records where SHKZG = 'H'. (Important)
 - For procurement or supply calculations, only consider records where SHKZG = 'S'. (Important)
 - For inventory calculation, consider both 'S' = Addition (positive MENGE) and 'H' = Deduction (negative MENGE). (Important)
-- For invoice number, vendor number and financial year take EBELN, LIFNR, and BUDAT_MKPF_ columns from mseg table. (Important)
-- String columns like MATNR, LIFNR, EBELN, CHARG, etc. should be properly quoted in the query for comparison.
+- For invoice number, vendor number and financial year take XBLNR_MKPF, LIFNR, and BUDAT_MKPF columns from mseg table. (Important)
+- String columns like MATNR, LIFNR, EBELN, CHARG, XBLNR_MKPF etc. should be properly quoted in the query for comparison.
 - Financial year (FY), fiscal year, or simply 'year' starts from April 1st of a given year to March 31st of the following year. (Important)
 - Q1 2024 (first Quarter) = April 1, 2024 to June 1, 2024; Q2 2024 (second Quarter) = July 1, 2024 to September 1, 2024. (Important)
 - Q3 2024 (third Quarter) = October 1, 2024 to December 1, 2024; Q4 2024 (last quarter or fourth Quarter) = January 1, 2025 to March 1, 2025. (Important)

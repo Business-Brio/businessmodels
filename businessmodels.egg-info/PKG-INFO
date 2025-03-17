@@ -1,6 +1,6 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.2
 Name: businessmodels
-Version: 0.2.1
+Version: 0.2.2
 Summary: It is a Data Science package containing many modules to help in analysis.
 Home-page: https://github.com/Business-Brio/businessmodels/tree/main
 Author: Business Brio
@@ -12,6 +12,15 @@ Classifier: Operating System :: OS Independent
 Description-Content-Type: text/markdown
 License-File: LICENSE
 Requires-Dist: business-models-initial
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: home-page
+Dynamic: license
+Dynamic: requires-dist
+Dynamic: summary
 
 businessmodels package made by Business Brio team members. 
 
