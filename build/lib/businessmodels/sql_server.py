@@ -142,7 +142,6 @@ class QAmodels:
         - LBKUM (Closing Stock, float)
 
         Column Logic:
-        - For BWART (Movement Type) only take where BWART = 105
         - For SHKZG (Debit/Credit Indicator):
         - 'S' = Addition (positive MENGE) that is Procurement quantity or Supply
         - 'H' = Deduction (negative MENGE) that is Consumption
