@@ -1,9 +1,9 @@
 from datetime import datetime
-
+ 
 class QAmodels:
     def __init__(self, schema):
         self.schema = schema  # Store schema as an instance attribute
-
+ 
     def enhancement_prompt(self, user_question, prompt_instructions=""):
         """
         Enhances the user's query by adding relevant schema details, instructions, and the current date.
@@ -80,22 +80,35 @@ class QAmodels:
         EXAMPLE: "Last quarter of 2024" MUST be interpreted as January 1, 2025 to March 31, 2025.
         EXAMPLE: "Last quarter of 2023" MUST be interpreted as January 1, 2024 to March 31, 2024.
         3. When comparing to "previous year", ALWAYS compare the same quarter of the previous financial year.
-        EXAMPLE: If we're looking at {current_quarter_start} to {current_quarter_end}, 
+        EXAMPLE: If we're looking at {current_quarter_start} to {current_quarter_end},
         then "previous year" means {prev_year_quarter_start} to {prev_year_quarter_end}.
         4. SAP data in this organization is organized by financial year where April is period 1, May is period 2, etc.
-        
+       
         DATA CONVERSION RULES:
-        1. ALWAYS convert BUDAT_MKPF to date using this EXACT syntax: 
+        1. ALWAYS convert BUDAT_MKPF to date using this EXACT syntax:
         CAST(CONVERT(VARCHAR(8), BUDAT_MKPF, 112) AS DATE)
         2. NEVER use DATEADD function with BUDAT_MKPF as an argument (Important and critical).
         3. MSEG.BUDAT_MKPF is stored in a format that requires this specific conversion to be handled properly.
         4. Do not attempt to convert dates using the Unix epoch or seconds-based approaches.
-        
+       
         For the specific query "{user_question}", you MUST interpret:
         - "Last quarter 2024" as {current_quarter_start} to {current_quarter_end} (Q4 of FY 2024-2025)
         - "Previous year" as {prev_year_quarter_start} to {prev_year_quarter_end} (Q4 of FY 2023-2024)
         Transform the user's question into a clear analysis plan using plain text only. Do not use markdown, bullets, or numbering. Format your response as follows:
-        "Analysis Plan: [Restate the core question in specific terms, clearly specifying the exact date ranges]
+       
+        Outlier Calculation:
+        "Generate an optimized SQL query to find outliers in the MENGE column.
+        The outliers are defined using the Interquartile Range (IQR) method for both columns:
+ 
+        Formula for Outliers:
+        Q1 (First Quartile) = 25th percentile of the column
+        Q3 (Third Quartile) = 75th percentile of the column
+        IQR (Interquartile Range) = Q3 - Q1
+        Lower Bound = Q1 - (1.5 × IQR)
+        Upper Bound = Q3 + (1.5 × IQR)
+        Any value in MENGE that is less than the Lower Bound or greater than the Upper Bound is considered an outlier or anomaly.
+        Use the PERCENTILE_CONT function to calculate Q1 and Q3 efficiently and return only the outlier values from both columns.""Analysis Plan: [Restate the core question in specific terms, clearly specifying the exact date ranges]
+       
         Data needed: [List the specific tables and fields required]
         Time periods: [Define exact date ranges with specific months and years - be very explicit]
         Calculations: [Specify exact formulas for all metrics mentioned]
@@ -107,10 +120,14 @@ class QAmodels:
             - For inventory calculation, consider both 'S' = Addition (positive MENGE) and 'H' = Deduction (negative MENGE). (Important)
             - For invoice number, purchase order number, vendor number and financial year take XBLNR_MKPF, EBELN, LIFNR, and BUDAT_MKPF columns from mseg table. (Important)
             - If a user asks about duplicate invoice number always filter BWART = 105. (Important)
+            - Any value in MENGE that is less than the Lower Bound or greater than the Upper Bound is considered an outlier or anomaly. (Important)
+            - For outlier or anomaly calculation strictly take only year or time period which is mentioned in the query. (Important)
+            - For outlier or anomaly calculation if the user mentioned 2024 in the query do not compare with previous year and take the financial year. (Important)
+            - For outlier or anomaly calculation if the user mention vendor number then only take LIFNR column from mseg table. (Important)
             - Convert the datatype of BUDAT_MKPF from 'YYYYMMDD' to 'YYYY-MM-DD'. (Important)
         """
         return enhancement_prompt
-
+ 
     def sql_prompt(self, enhanced_question):
         """
         Generate the SQL prompt for OpenAI based on the user question.
@@ -120,7 +137,7 @@ class QAmodels:
         You are a highly skilled SQL expert and data analyst specializing in Fabric SQL database environments. Generate an optimized SQL Server-compatible query strictly using only the tables mseg (Material Document Segment) and mbewh (Material Valuation History) from the database schema.
         Enhanced User Question: {enhanced_question}
         Today's date is: {current_date}
-
+ 
         Table Reference Rules:
         - Columns from mseg:
         - MATNR (Material Number, nvarchar(max))
@@ -134,29 +151,42 @@ class QAmodels:
         - WERKS (Plant, bigint)
         - LGORT (Storage Location, nvarchar(max))
         - CHARG (Batch Number, nvarchar(max))
+        - DMBTR (Amount, float)
         - XBLNR_MKPF (Invoice Number, nvarchar(max))
         - Columns from mbewh:
         - MATNR (Material Number, nvarchar(max))
         - LFMON (Financial Month, bigint)
         - LFGJA (Fiscal Year, bigint)
         - LBKUM (Closing Stock, float)
-
+ 
         Column Logic:
-        - For BWART (Movement Type) only take where BWART = 105
         - For SHKZG (Debit/Credit Indicator):
         - 'S' = Addition (positive MENGE) that is Procurement quantity or Supply
         - 'H' = Deduction (negative MENGE) that is Consumption
         - String comparisons should use equality operators (= or <>) with proper quoting
         - For string pattern matching, use LIKE operator with appropriate wildcards
-
+ 
         Opening Stock Calculation:
         - Opening Stock for each month = Previous month's LBKUM.
         - Use LFMON - 1 for the previous month.
         - If LFMON = 1 (April), use LFMON = 12 of the previous year (LFGJA - 1).
-
+       
+        Outlier Calculation:
+        "Generate an optimized SQL query to find outliers in the MENGE column.
+        The outliers are defined using the Interquartile Range (IQR) method for both columns:
+ 
+        Formula for Outliers:
+        Q1 (First Quartile) = 25th percentile of the column
+        Q3 (Third Quartile) = 75th percentile of the column
+        IQR (Interquartile Range) = Q3 - Q1
+        Lower Bound = Q1 - (1.5 × IQR)
+        Upper Bound = Q3 + (1.5 × IQR)
+        Any value in MENGE that is less than the Lower Bound or greater than the Upper Bound is considered an outlier or anomaly.
+        Use the PERCENTILE_CONT function to calculate Q1 and Q3 efficiently and return only the outlier values from both columns."
+ 
         Calendar to LFMON Conversion:  
         - April = 1, May = 2, June = 3, July = 4, August = 5, September = 6, October = 7, November = 8, December = 9, January = 10, February = 11, March = 12.
-
+ 
         Additional Guidelines:
         - Use the schema name {self.schema} for all table references without square brackets (e.g., schema.mseg instead of [schema].mseg).
         - Use only the mseg and mbewh tables; no other tables are allowed.
@@ -170,7 +200,7 @@ class QAmodels:
         - Optimize the SQL query for SQL Server performance:
         - Use appropriate window functions instead of self-joins when possible
         - Minimize subqueries that require shuffling large amounts of data
-        - Use proper date functions compatible with SQL Server 
+        - Use proper date functions compatible with SQL Server
         - Consider data partitioning when filtering on date columns
         - Do not include explanations—return only the SQL query as plain text (no Markdown formatting).
         - Apply all the necessary calculations which enhanced_question [{enhanced_question}] mentioned.
@@ -182,7 +212,7 @@ class QAmodels:
         - For conditional logic, ensure CASE statements are properly formatted for SQL Server.
         - Ensure all string comparisons are case-sensitive unless specified otherwise
         - First, inspect the actual column names available in the mseg table schema. Based on the error message, BUDAT_MKPF is not available but there might be columns like BUDAT_MKPF, CPUDT_MKPF, or BUSTM.
-        Note: 
+        Note:
         - For consumption calculations, only consider records where SHKZG = 'H'. (Important)
         - For procurement or supply calculations, only consider records where SHKZG = 'S'. (Important)
         - For inventory calculation, consider both 'S' = Addition (positive MENGE) and 'H' = Deduction (negative MENGE). (Important)
@@ -196,7 +226,8 @@ class QAmodels:
         - Generate an SQL Server-compatible query for BUDAT_MKPF, avoiding incorrect default dates like 1970-01-01. (Important)
         - Generate an SQL Server-compatible query for BUDAT_MKPF, avoiding incorrect default dates like 1900-01-01. (Important)
         - If a user asks about duplicate invoice number always filter BWART = 105. (Important)
+        - Any value in MENGE that is less than the Lower Bound or greater than the Upper Bound is considered an outlier or anomaly. (Important)
         Provide only the SQL Server-compatible query as plain text without any formatting or additional text.
-        
+ 
         """
         return sql_prompt
