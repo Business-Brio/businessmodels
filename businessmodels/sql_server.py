@@ -124,6 +124,8 @@ class QAmodels:
             - For outlier or anomaly calculation strictly take only year or time period which is mentioned in the query. (Important)
             - For outlier or anomaly calculation if the user mentioned 2024 in the query do not compare with previous year and take the financial year. (Important)
             - For outlier or anomaly calculation if the user mention vendor number then only take LIFNR column from mseg table. (Important)
+            - Generate an SQL Server-compatible query for BUDAT_MKPF, avoiding incorrect default dates like 1970-01-01. (Important)
+            - Generate an SQL Server-compatible query for BUDAT_MKPF, avoiding incorrect default dates like 1900-01-01. (Important)
             - Convert the datatype of BUDAT_MKPF from 'YYYYMMDD' to 'YYYY-MM-DD'. (Important)
         """
         return enhancement_prompt
@@ -221,8 +223,6 @@ class QAmodels:
         - Financial year (FY), fiscal year, or simply 'year' starts from April 1st of a given year to March 31st of the following year. (Important)
         - Q1 2024 (first Quarter) = April 1, 2024 to June 1, 2024; Q2 2024 (second Quarter) = July 1, 2024 to September 1, 2024. (Important)
         - Q3 2024 (third Quarter) = October 1, 2024 to December 1, 2024; Q4 2024 (last quarter or fourth Quarter) = January 1, 2025 to March 1, 2025. (Important)
-        - Convert the datatype of BUDAT_MKPF use DATEADD(). (Important)
-        - Example format: "SELECT CAST(DATEADD(SECOND, BUDAT_MKPF, '2024-10-01') AS DATE)" if BUDAT_MKPF represents days. (Important)
         - Generate an SQL Server-compatible query for BUDAT_MKPF, avoiding incorrect default dates like 1970-01-01. (Important)
         - Generate an SQL Server-compatible query for BUDAT_MKPF, avoiding incorrect default dates like 1900-01-01. (Important)
         - If a user asks about duplicate invoice number always filter BWART = 105. (Important)
