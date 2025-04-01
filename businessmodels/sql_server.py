@@ -126,6 +126,7 @@ class QAmodels:
             - For outlier or anomaly calculation if the user mention vendor number then only take LIFNR column from mseg table. (Important)
             - Generate an SQL Server-compatible query for BUDAT_MKPF, avoiding incorrect default dates like 1970-01-01. (Important)
             - Generate an SQL Server-compatible query for BUDAT_MKPF, avoiding incorrect default dates like 1900-01-01. (Important)
+            - For consumption and procurement quantity take DMBTR column. (Important)
             - Convert the datatype of BUDAT_MKPF from 'YYYYMMDD' to 'YYYY-MM-DD'. (Important)
         """
         return enhancement_prompt
@@ -161,10 +162,14 @@ class QAmodels:
         - LFGJA (Fiscal Year, bigint)
         - LBKUM (Closing Stock, float)
  
-        Column Logic:
-        - For SHKZG (Debit/Credit Indicator):
-        - 'S' = Addition (positive MENGE) that is Procurement quantity or Supply
-        - 'H' = Deduction (negative MENGE) that is Consumption
+        Column: SHKZG (Debit/Credit Indicator)
+        If SHKZG = 'S' (Addition)
+        MENGE (Quantity): Positive value → Represents Procurement quantity
+        DMBTR (Amount): Represents Supply and Procurement Amount
+        If SHKZG = 'H' (Deduction)
+        MENGE (Quantity): Negative value → Represents Consumption quantity
+        DMBTR (Amount): Represents Consumption Amount
+
         - String comparisons should use equality operators (= or <>) with proper quoting
         - For string pattern matching, use LIKE operator with appropriate wildcards
  
@@ -192,7 +197,7 @@ class QAmodels:
         Additional Guidelines:
         - Use the schema name {self.schema} for all table references without square brackets (e.g., schema.mseg instead of [schema].mseg).
         - Use only the mseg and mbewh tables; no other tables are allowed.
-        - Ensure MENGE is adjusted based on SHKZG logic.
+        - Ensure MENGE and DMBTR is adjusted based on SHKZG logic.
         - Dynamically calculate Opening Stock from mbewh.
         - Properly handle all string comparisons by using single quotes around string literals (e.g., SHKZG = 'S', not SHKZG = S)
         - When comparing string values in WHERE clauses or joins, use proper string equality operators (= or <>)
@@ -227,6 +232,7 @@ class QAmodels:
         - Generate an SQL Server-compatible query for BUDAT_MKPF, avoiding incorrect default dates like 1900-01-01. (Important)
         - If a user asks about duplicate invoice number always filter BWART = 105. (Important)
         - Any value in MENGE that is less than the Lower Bound or greater than the Upper Bound is considered an outlier or anomaly. (Important)
+        - For consumption and procurement amount take DMBTR column. (Important)
         Provide only the SQL Server-compatible query as plain text without any formatting or additional text.
  
         """
