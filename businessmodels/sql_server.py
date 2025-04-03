@@ -96,19 +96,6 @@ class QAmodels:
         - "Previous year" as {prev_year_quarter_start} to {prev_year_quarter_end} (Q4 of FY 2023-2024)
         Transform the user's question into a clear analysis plan using plain text only. Do not use markdown, bullets, or numbering. Format your response as follows:
        
-        Outlier Calculation:
-        "Generate an optimized SQL query to find outliers in the MENGE column.
-        The outliers are defined using the Interquartile Range (IQR) method for both columns:
- 
-        Formula for Outliers:
-        Q1 (First Quartile) = 25th percentile of the column
-        Q3 (Third Quartile) = 75th percentile of the column
-        IQR (Interquartile Range) = Q3 - Q1
-        Lower Bound = Q1 - (1.5 × IQR)
-        Upper Bound = Q3 + (1.5 × IQR)
-        Any value in MENGE that is less than the Lower Bound or greater than the Upper Bound is considered an outlier or anomaly.
-        Use the PERCENTILE_CONT function to calculate Q1 and Q3 efficiently and return only the outlier values from both columns.""Analysis Plan: [Restate the core question in specific terms, clearly specifying the exact date ranges]
-       
         Data needed: [List the specific tables and fields required]
         Time periods: [Define exact date ranges with specific months and years - be very explicit]
         Calculations: [Specify exact formulas for all metrics mentioned]
@@ -120,10 +107,6 @@ class QAmodels:
             - For inventory calculation, consider both 'S' = Addition (positive MENGE) and 'H' = Deduction (negative MENGE). (Important)
             - For invoice number, purchase order number, vendor number and financial year take XBLNR_MKPF, EBELN, LIFNR, and BUDAT_MKPF columns from mseg table. (Important)
             - If a user asks about duplicate invoice number always filter BWART = 105. (Important)
-            - Any value in MENGE that is less than the Lower Bound or greater than the Upper Bound is considered an outlier or anomaly. (Important)
-            - For outlier or anomaly calculation strictly take only year or time period which is mentioned in the query. (Important)
-            - For outlier or anomaly calculation if the user mentioned 2024 in the query do not compare with previous year and take the financial year. (Important)
-            - For outlier or anomaly calculation if the user mention vendor number then only take LIFNR column from mseg table. (Important)
             - Generate an SQL Server-compatible query for BUDAT_MKPF, avoiding incorrect default dates like 1970-01-01. (Important)
             - Generate an SQL Server-compatible query for BUDAT_MKPF, avoiding incorrect default dates like 1900-01-01. (Important)
             - For consumption and procurement quantity take DMBTR column. (Important)
@@ -177,19 +160,6 @@ class QAmodels:
         - Opening Stock for each month = Previous month's LBKUM.
         - Use LFMON - 1 for the previous month.
         - If LFMON = 1 (April), use LFMON = 12 of the previous year (LFGJA - 1).
-       
-        Outlier Calculation:
-        "Generate an optimized SQL query to find outliers in the MENGE column.
-        The outliers are defined using the Interquartile Range (IQR) method for both columns:
- 
-        Formula for Outliers:
-        Q1 (First Quartile) = 25th percentile of the column
-        Q3 (Third Quartile) = 75th percentile of the column
-        IQR (Interquartile Range) = Q3 - Q1
-        Lower Bound = Q1 - (1.5 × IQR)
-        Upper Bound = Q3 + (1.5 × IQR)
-        Any value in MENGE that is less than the Lower Bound or greater than the Upper Bound is considered an outlier or anomaly.
-        Use the PERCENTILE_CONT function to calculate Q1 and Q3 efficiently and return only the outlier values from both columns."
  
         Calendar to LFMON Conversion:  
         - April = 1, May = 2, June = 3, July = 4, August = 5, September = 6, October = 7, November = 8, December = 9, January = 10, February = 11, March = 12.
@@ -231,8 +201,7 @@ class QAmodels:
         - Generate an SQL Server-compatible query for BUDAT_MKPF, avoiding incorrect default dates like 1970-01-01. (Important)
         - Generate an SQL Server-compatible query for BUDAT_MKPF, avoiding incorrect default dates like 1900-01-01. (Important)
         - If a user asks about duplicate invoice number always filter BWART = 105. (Important)
-        - Any value in MENGE that is less than the Lower Bound or greater than the Upper Bound is considered an outlier or anomaly. (Important)
-        - For consumption and procurement amount take DMBTR column. (Important)
+        - For consumption amount and procurement amount take DMBTR column. (Important)
         Provide only the SQL Server-compatible query as plain text without any formatting or additional text.
  
         """
